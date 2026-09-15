@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yanis Valerius — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12151b;
+    --ink-soft:#1b1f28;
+    --paper:#ece7dd;
+    --paper-soft:#e2dccf;
+    --amber:#e2a03f;
+    --wire:#6e8cae;
+    --mist:#8b8f98;
+    --line-on-ink: rgba(236,231,221,0.14);
+    --line-on-paper: rgba(18,21,27,0.14);
+    --maxw: 760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:16px;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk', sans-serif;
+    margin:0;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px;}
+  .prose{max-width:var(--maxw);}
+
+  /* Skip link for accessibility */
+  .skip-link{
+    position:absolute;left:-999px;top:0;background:var(--amber);color:var(--ink);
+    padding:10px 16px;z-index:100;
+  }
+  .skip-link:focus{left:12px;top:12px;}
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:sticky;top:0;z-index:20;
+    background:rgba(18,21,27,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line-on-ink);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 0;
+  }
+  .nav-id{
+    font-size:14px;color:var(--paper);text-decoration:none;
+  }
+  .nav-id .dot{color:var(--amber);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{
+    font-size:13px;text-decoration:none;color:var(--mist);
+    transition:color .15s ease;
+  }
+  .nav-links a:hover{color:var(--amber);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:96px 0 88px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line-on-ink);
+  }
+  .hero-grid-bg{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(var(--line-on-ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-on-ink) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(ellipse 70% 60% at 30% 20%, black 40%, transparent 85%);
+    pointer-events:none;
+  }
+  .hero-content{position:relative;}
+  .kicker{
+    font-size:13px;color:var(--wire);
+    margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .kicker .blip{
+    width:7px;height:7px;background:var(--amber);border-radius:50%;
+    box-shadow:0 0 0 3px rgba(226,160,63,0.18);
+  }
+  .hero h1{
+    font-size:clamp(40px, 7vw, 74px);
+    line-height:1.02;
+    color:var(--paper);
+    max-width:14ch;
+  }
+  .hero .role{
+    margin-top:18px;
+    font-size:18px;
+    color:var(--mist);
+    max-width:46ch;
+  }
+  .hero .role b{color:var(--paper);font-weight:500;}
+  .terminal{
+    margin-top:40px;
+    max-width:560px;
+    border:1px solid var(--line-on-ink);
+    background:var(--ink-soft);
+  }
+  .terminal-bar{
+    display:flex;gap:6px;padding:10px 12px;
+    border-bottom:1px solid var(--line-on-ink);
+  }
+  .terminal-bar span{
+    width:9px;height:9px;border-radius:50%;background:var(--mist);opacity:.5;
+  }
+  .terminal-body{
+    padding:16px 18px 20px;
+    font-size:13.5px;
+    color:var(--wire);
+    min-height:96px;
+  }
+  .terminal-body .prompt{color:var(--amber);}
+  .terminal-body .out{color:var(--mist);}
+  .cursor{
+    display:inline-block;width:7px;height:14px;background:var(--amber);
+    margin-left:2px;vertical-align:-2px;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- SECTION SHELLS ---------- */
+  section{padding:80px 0;}
+  .on-paper{background:var(--paper);color:var(--ink);border-bottom:1px solid var(--line-on-paper);}
+  .on-paper .mist{color:#5b5f68;}
+  .section-head{
+    display:flex;align-items:baseline;gap:16px;
+    margin-bottom:40px;
+    border-bottom:1px solid currentColor;
+    padding-bottom:16px;
+    opacity:0.98;
+  }
+  .section-head .index{
+    font-size:13px;color:var(--amber);
+  }
+  .section-head h2{font-size:26px;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap:48px;
+  }
+  .about-grid p{margin:0 0 16px;}
+  .fact-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-on-paper);}
+  .fact-list li{
+    display:flex;justify-content:space-between;gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--line-on-paper);
+    font-size:13.5px;
+  }
+  .fact-list li span:first-child{color:#5b5f68;}
+
+  .cv-btn{
+    display:inline-flex;align-items:center;gap:10px;
+    margin-top:8px;padding:12px 20px;
+    background:var(--ink);color:var(--paper);
+    text-decoration:none;font-size:13.5px;
+    border:1px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cv-btn:hover{background:transparent;color:var(--ink);}
+  .cv-btn span{color:var(--amber);}
+  .hero .cv-btn{
+    background:transparent;color:var(--paper);border:1px solid var(--wire);
+  }
+  .hero .cv-btn:hover{background:var(--amber);color:var(--ink);border-color:var(--amber);}
+  .hero .cv-btn:hover span{color:var(--ink);}
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(210px,1fr));
+    gap:1px;
+    background:var(--line-on-ink);
+    border:1px solid var(--line-on-ink);
+  }
+  .skill-mod{
+    background:var(--ink);
+    padding:22px 20px;
+  }
+  .skill-mod .tag{
+    font-size:11.5px;color:var(--amber);margin-bottom:10px;
+  }
+  .skill-mod h3{
+    font-size:17px;color:var(--paper);margin-bottom:8px;
+  }
+  .skill-mod p{
+    margin:0;font-size:13px;color:var(--mist);
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .proj-list{display:flex;flex-direction:column;}
+  .proj-row{
+    display:grid;
+    grid-template-columns: 90px 1fr auto;
+    gap:20px;
+    align-items:start;
+    padding:26px 0;
+    border-bottom:1px solid var(--line-on-paper);
+    text-decoration:none;
+    color:inherit;
+  }
+  .proj-row .num{font-size:13px;color:var(--wire);padding-top:4px;}
+  .proj-row h3{font-size:19px;margin-bottom:6px;}
+  .proj-row p{margin:0;font-size:14px;color:#5b5f68;max-width:60ch;}
+  .proj-row .stack{
+    margin-top:10px;font-size:12px;color:var(--wire);
+  }
+  .proj-row .go{
+    font-size:13px;color:var(--ink);padding-top:4px;white-space:nowrap;
+  }
+  .proj-note{
+    margin-top:28px;font-size:13px;color:#5b5f68;
+    border-left:2px solid var(--amber);padding-left:14px;
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact-wrap{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:48px;
+  }
+  .contact-list{list-style:none;margin:0;padding:0;}
+  .contact-list li{border-top:1px solid var(--line-on-ink);}
+  .contact-list li:last-child{border-bottom:1px solid var(--line-on-ink);}
+  .contact-list a{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 4px;text-decoration:none;
+    font-size:15px;color:var(--paper);
+    transition:color .15s ease;
+  }
+  .contact-list a:hover{color:var(--amber);}
+  .contact-list .label{color:var(--mist);font-size:12.5px;}
+  .contact-list .arrow{color:var(--amber);font-size:13px;}
+
+  footer{
+    padding:28px 0 40px;
+    font-size:12px;color:var(--mist);
+    display:flex;justify-content:space-between;
+  }
+
+  @media (max-width: 720px){
+    .about-grid, .contact-wrap{grid-template-columns:1fr;}
+    .proj-row{grid-template-columns:1fr;}
+    .proj-row .num{display:none;}
+    .nav-links{display:none;}
+    .hero{padding:76px 0 60px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cursor{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="nav-id" href="#top">yanis<span class="dot">.</span>valerius</a>
+    <ul class="nav-links">
+      <li><a href="#about">à propos</a></li>
+      <li><a href="#skills">compétences</a></li>
+      <li><a href="#projects">projets</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="wrap hero-content">
+      <p class="kicker"><span class="blip" aria-hidden="true"></span>disponible — étudiant en BTS SIO</p>
+      <h1>Yanis Valerius</h1>
+      <p class="role">17 ans, en <b>BTS SIO</b> au lycée <b>Léonard de Vinci</b>. Passionné d'informatique — systèmes, réseaux, et développement.</p>
+
+      <div class="terminal" role="img" aria-label="Terminal affichant : whoami, Yanis Valerius, étudiant BTS SIO, passion informatique">
+        <div class="terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="terminal-body">
+          <div><span class="prompt">yanis@sio</span><span class="out"> ~ % </span>whoami</div>
+          <div class="out">&gt; Yanis Valerius — 17 ans</div>
+          <div class="out">&gt; BTS SIO, Lycée Léonard de Vinci</div>
+          <div class="out">&gt; Intérêt : systèmes, réseaux, développement<span class="cursor" aria-hidden="true"></span></div>
+        </div>
+      </div>
+
+      <a class="cv-btn" href="CV_Yanis_Valerius.pdf" download style="margin-top:28px;">Télécharger mon CV <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="index">01</span>
+        <h2>À propos</h2>
+      </div>
+      <div class="about-grid">
+        <div class="prose">
+          <p>Je m'appelle Yanis Valerius, j'ai 17 ans et je suis en 1ère année de BTS Services Informatiques aux Organisations (SIO) au lycée Léonard De Vinci. L'informatique m'intéresse depuis longtemps, aussi bien du côté des systèmes et réseaux que du développement.</p>
+          <p>Poli, ponctuel, patient, à l'écoute et organisé, j'ai déjà cumulé plusieurs stages en entreprise, ce qui m'a permis de gagner en autonomie et de découvrir le monde professionnel de l'informatique.</p>
+          <a class="cv-btn" href="CV_Yanis_Valerius.pdf" download>Télécharger mon CV <span aria-hidden="true">↓</span></a>
+        </div>
+        <ul class="fact-list">
+          <li><span>Formation</span><span>BTS SIO, 1ère année</span></li>
+          <li><span>Établissement</span><span>Lycée Léonard De Vinci</span></li>
+          <li><span>Âge</span><span>17 ans</span></li>
+          <li><span>Anglais</span><span>B1 intermédiaire</span></li>
+          <li><span>Centres d'intérêt</span><span>Sport, jeux vidéo, lecture, voyages</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="index">02</span>
+        <h2>Compétences</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-mod">
+          <p class="tag">Bureautique</p>
+          <h3>PowerPoint / Word</h3>
+          <p>Maîtrise des logiciels bureautiques courants pour la production de documents et de présentations.</p>
+        </div>
+        <div class="skill-mod">
+          <p class="tag">Organisation</p>
+          <h3>Gestion des fichiers</h3>
+          <p>Classement, structuration et suivi de fichiers dans un cadre professionnel.</p>
+        </div>
+        <div class="skill-mod">
+          <p class="tag">Communication</p>
+          <h3>E-mails &amp; pièces jointes</h3>
+          <p>Gestion des e-mails professionnels et de leurs pièces jointes.</p>
+        </div>
+        <div class="skill-mod">
+          <p class="tag">Méthode</p>
+          <h3>Travail en équipe</h3>
+          <p>Habitué au travail collectif, notamment lors des périodes de stage en entreprise.</p>
+        </div>
+        <div class="skill-mod">
+          <p class="tag">Langue</p>
+          <h3>Anglais — B1</h3>
+          <p>Niveau intermédiaire, à l'écrit comme à l'oral.</p>
+        </div>
+        <div class="skill-mod">
+          <p class="tag">Savoir-être</p>
+          <h3>Poli, ponctuel, organisé</h3>
+          <p>Patient et à l'écoute, avec une capacité d'adaptation développée au fil des stages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-paper" id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="index">03</span>
+        <h2>Projets</h2>
+      </div>
+
+      <div class="proj-list">
+        <a class="proj-row" href="https://github.com/Yanis-Valerius" target="_blank" rel="noopener">
+          <span class="num">GH</span>
+          <span>
+            <h3>Mon GitHub</h3>
+            <p>Retrouve l'ensemble de mes dépôts et projets de code sur mon profil GitHub.</p>
+            <span class="stack">github.com/Yanis-Valerius</span>
+          </span>
+          <span class="go">voir →</span>
+        </a>
+
+        <a class="proj-row" href="#" target="_blank" rel="noopener">
+          <span class="num">01</span>
+          <span>
+            <h3>Nom du projet</h3>
+            <p>Courte description : ce que fait le projet, dans quel cadre (cours, personnel, stage) et ce que tu y as appris.</p>
+            <span class="stack">Technologies utilisées</span>
+          </span>
+          <span class="go">voir →</span>
+        </a>
+
+        <a class="proj-row" href="#" target="_blank" rel="noopener">
+          <span class="num">02</span>
+          <span>
+            <h3>Nom du projet</h3>
+            <p>Courte description : ce que fait le projet, dans quel cadre (cours, personnel, stage) et ce que tu y as appris.</p>
+            <span class="stack">Technologies utilisées</span>
+          </span>
+          <span class="go">voir →</span>
+        </a>
+      </div>
+
+      <p class="proj-note">Les deux fiches ci-dessus sont des exemples à remplacer : ajoute le nom, la description et le lien de chacun de tes projets réels (ceux de ton dépôt GitHub par exemple).</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="index">04</span>
+        <h2>Contact</h2>
+      </div>
+      <div class="contact-wrap">
+        <div>
+          <p class="prose" style="color:var(--mist); margin-bottom:0;">Pour me contacter ou suivre mon travail, c'est par ici. Remplace les liens ci-contre par tes vraies adresses.</p>
+        </div>
+        <ul class="contact-list">
+          <li>
+            <a href="mailto:yanis.valerius.pro@gmail.com">
+              <span>Email<br><span class="label">yanis.valerius.pro@gmail.com</span></span>
+              <span class="arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/Yanis-Valerius" target="_blank" rel="noopener">
+              <span>GitHub<br><span class="label">github.com/Yanis-Valerius</span></span>
+              <span class="arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span>LinkedIn<br><span class="label">à compléter</span></span>
+              <span class="arrow">↗</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>Yanis Valerius — BTS SIO</span>
+  <span>Lycée Léonard de Vinci</span>
+</footer>
+
+</body>
+</html>
